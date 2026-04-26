@@ -1,4 +1,4 @@
-"""LangChain starter — a tool-calling agent powered by Nebius."""
+"""LangChain starter — a tool-calling agent powered by Gemini."""
 import os
 from datetime import datetime
 
@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from pydantic import SecretStr
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.tools import tool
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 
 load_dotenv()
@@ -25,10 +25,9 @@ def word_count(text: str) -> int:
 
 
 def build_agent() -> AgentExecutor:
-    llm = ChatOpenAI(
-        model="Qwen/Qwen3-30B-A3B",
-        base_url="https://api.tokenfactory.nebius.com/v1/",
-        api_key=SecretStr(os.environ["NEBIUS_API_KEY"]),
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
+        api_key=SecretStr(os.environ["GEMINI_API_KEY"]),
     )
 
     prompt = ChatPromptTemplate.from_messages(
@@ -51,7 +50,7 @@ def build_agent() -> AgentExecutor:
 
 def main():
     agent = build_agent()
-    print("🔗 LangChain agent ready. Type 'exit' to quit.\n")
+    print("🔗 LangChain agent (Gemini) ready. Type 'exit' to quit.\n")
 
     history = []
     while True:
